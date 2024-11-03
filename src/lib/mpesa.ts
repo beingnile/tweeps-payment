@@ -1,4 +1,4 @@
-import { MpesaConfig, MpesaPaymentRequest, MpesaResponse } from '@/types/mpesa';
+import { MpesaConfig, MpesaPaymentRequest, MpesaResponse } from '../../types/mpesa';
 import { Logger } from './logger';
 
 interface MpesaRequestPayload {
