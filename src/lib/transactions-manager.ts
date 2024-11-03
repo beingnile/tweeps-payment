@@ -3,6 +3,7 @@ import path from 'path';
 
 interface Transaction {
   id: string;
+  phoneNumber: string;
   amount: number;
   status: 'Completed' | 'Pending';
   timestamp: number;
@@ -10,7 +11,7 @@ interface Transaction {
 
 export class TransactionsManager {
   private static TRANSACTIONS_FILE = path.join(process.cwd(), 'transactions.json');
-  private static MAX_TRANSACTIONS = 30;
+  private static MAX_TRANSACTIONS = 40;
 
   static async getTransactions(): Promise<Transaction[]> {
     try {
