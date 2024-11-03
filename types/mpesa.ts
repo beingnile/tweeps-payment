@@ -1,7 +1,7 @@
 export interface MpesaConfig {
   consumerKey: string;
   consumerSecret: string;
-  aseURL: string;
+  baseURL: string;
   passkey: string;
   shortcode: string;
   callbackUrl: string;
