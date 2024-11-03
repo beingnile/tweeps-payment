@@ -1,6 +1,20 @@
 import { MpesaConfig, MpesaPaymentRequest, MpesaResponse } from '@/types/mpesa';
 import { Logger } from './logger';
 
+interface MpesaRequestPayload {
+  BusinessShortCode: string;
+  Password: string;
+  Timestamp: string;
+  TransactionType: string;
+  Amount: number;
+  PartyA: string;
+  PartyB: string;
+  PhoneNumber: string;
+  CallBackURL: string;
+  AccountReference: string;
+  TransactionDesc: string;
+}
+
 export class MpesaAPI {
   private config: MpesaConfig;
   private accessToken: string | null = null;
@@ -104,7 +118,7 @@ export class MpesaAPI {
 
   private async makeRequest(
     endpoint: string,
-    payload: any,
+    payload: MpesaRequestPayload,
     token: string,
     retries = 3
   ): Promise<any> {
@@ -180,7 +194,9 @@ export class MpesaAPI {
     ).toString('base64');
   }
 
-  private handleError(error: any): Error {
+  private handleError(error: Error | unknown): Error {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+
     if (error.message.includes('Authentication failed')) {
       return new Error('Payment service temporarily unavailable');
     }

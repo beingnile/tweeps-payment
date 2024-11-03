@@ -1,3 +1,9 @@
+interface LogMetadata {
+  [key: string]: unknown;
+  error?: string;
+  stack?: string;
+}
+
 export class Logger {
   private serviceName: string;
 

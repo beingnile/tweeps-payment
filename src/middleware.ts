@@ -25,7 +25,7 @@ export async function middleware(request: NextRequest) {
       new TextEncoder().encode(process.env.JWT_SECRET || 'your-secret-key')
     );
     return NextResponse.next();
-  } catch (error) {
+  } catch {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 }
