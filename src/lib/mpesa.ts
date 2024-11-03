@@ -103,8 +103,9 @@ export class MpesaAPI {
       );
 
       return response;
-    } catch (error) {
-      this.logger.error('Payment initiation failed:', error);
+    } catch {
+      this.logger.error('Payment initiation failed');
+      return response
     }
   }
 
