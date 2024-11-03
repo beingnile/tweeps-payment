@@ -46,7 +46,7 @@ export async function POST(request: Request) {
         status: 'Completed'
       });
 
-      logger.info('Payment processed successfully', { transactionId: mpesaReceiptNumber });
+      logger.info('Payment processed successfully');
     } else {
       await TransactionsManager.addTransaction({
         amount: 0,
