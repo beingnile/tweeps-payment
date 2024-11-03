@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { MpesaPaymentRequest } from '../types/mpesa'
+import { MpesaPaymentRequest } from '../../types/mpesa'
 
 export default function MpesaPaymentForm() {
   const [loading, setLoading] = useState(false)
