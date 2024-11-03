@@ -105,7 +105,6 @@ export class MpesaAPI {
       return response;
     } catch (error) {
       this.logger.error('Payment initiation failed:', error);
-      throw this.handleError(error);
     }
   }
 
