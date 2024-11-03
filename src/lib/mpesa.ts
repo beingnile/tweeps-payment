@@ -28,13 +28,6 @@ export class MpesaAPI {
   }
 
   private validateConfig(config: MpesaConfig) {
-    const requiredFields = ['consumerKey', 'consumerSecret', 'baseURL', 'passkey', 'shortcode', 'callbackUrl'];
-    requiredFields.forEach(field => {
-      if (!config[field]) {
-        throw new Error('Missing required configuration field');
-      }
-    });
-
     if (!config.callbackUrl.startsWith('https')) {
       throw new Error('Callback URL must use HTTPS in production');
     }
