@@ -62,8 +62,8 @@ export class MpesaAPI {
       this.accessToken = data.access_token;
       this.tokenExpiry = Date.now() + (data.expires_in * 1000);
       return this.accessToken;
-    } catch (error) {
-      this.logger.error('Failed to get access token:', error);
+    } catch {
+      this.logger.error('Failed to get access token');
       throw new Error('Authentication failed');
     }
   }
