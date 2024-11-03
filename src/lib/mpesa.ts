@@ -186,16 +186,4 @@ export class MpesaAPI {
       `${this.config.shortcode}${this.config.passkey}${timestamp}`
     ).toString('base64');
   }
-
-  private handleError(error: unknown): Error {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-
-    if (error.message.includes('Authentication failed')) {
-      return new Error('Payment service temporarily unavailable');
-    }
-    if (error.message.includes('Invalid phone number')) {
-      return new Error('Please provide a valid Kenyan phone number');
-    }
-    return new Error('Payment request failed. Please try again');
-  }
 }
