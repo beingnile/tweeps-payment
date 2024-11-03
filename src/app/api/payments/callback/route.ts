@@ -33,7 +33,6 @@ export async function POST(request: Request) {
 
     if (data.Body.stkCallback.ResultCode === 0) {
       const amount = callbackData.find(item => item.Name === 'Amount');
-      const phoneNumber = callbackData.find(item => item.Name === 'PhoneNumber');
 
       if (!amount || !phoneNumber) {
         throw new Error('Missing required callback data');
@@ -41,7 +40,6 @@ export async function POST(request: Request) {
 
       // Add to transactions file
       await TransactionsManager.addTransaction({
-        phoneNumber: phoneNumber.Value.toString(),
         amount: Number(amount.Value),
         status: 'Completed'
       });
@@ -49,7 +47,6 @@ export async function POST(request: Request) {
       logger.info('Payment processed successfully');
     } else {
       await TransactionsManager.addTransaction({
-        phoneNumber: phoneNumber.Value.toString(),
         amount: 0,
         status: 'Pending'
       });

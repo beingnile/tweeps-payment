@@ -3,7 +3,6 @@ import path from 'path';
 
 interface Transaction {
   id: string;
-  phoneNumber: string;
   amount: number;
   status: 'Completed' | 'Pending';
   timestamp: number;
