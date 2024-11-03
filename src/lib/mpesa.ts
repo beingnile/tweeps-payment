@@ -187,7 +187,7 @@ export class MpesaAPI {
     ).toString('base64');
   }
 
-  private handleError(error: Error | unknown): Error {
+  private handleError(error: unknown): Error {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
 
     if (error.message.includes('Authentication failed')) {
