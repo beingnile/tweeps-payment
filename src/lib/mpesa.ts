@@ -31,7 +31,7 @@ export class MpesaAPI {
     const requiredFields = ['consumerKey', 'consumerSecret', 'baseURL', 'passkey', 'shortcode', 'callbackUrl'];
     requiredFields.forEach(field => {
       if (!config[field]) {
-        throw new Error(`Missing required configuration field: ${field}`);
+        throw new Error('Missing required configuration field');
       }
     });
 
