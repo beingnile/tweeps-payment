@@ -64,7 +64,7 @@ export default function MpesaPaymentForm() {
     }
 
     try {
-      const response = await fetch('/api/mpesa/initiate', {
+      const response = await fetch('/api/payments/initiate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -175,7 +175,7 @@ export default function MpesaPaymentForm() {
       <button
         type="submit"
         disabled={loading || !validatePhoneNumber(formData.phoneNumber) || !validateAmount(formData.amount)}
-        className={`w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300 ease-in-out ${
+        className={`w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-[#f2ae2a] hover:bg-[#4d200b] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#f2ae2a] transition-all duration-300 ease-in-out ${
           (loading || !validatePhoneNumber(formData.phoneNumber) || !validateAmount(formData.amount)) 
             ? 'opacity-50 cursor-not-allowed' 
             : 'hover:scale-[1.02]'

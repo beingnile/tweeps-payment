@@ -90,7 +90,7 @@ export class MpesaAPI {
       });
 
       const response = await this.makeRequest(
-        '/mpesa/stkpush/v1/processrequest',
+        `${this.config.baseURL}/mpesa/stkpush/v1/processrequest`,
         payload,
         token
       );
@@ -110,7 +110,7 @@ export class MpesaAPI {
   ): Promise<any> {
     for (let attempt = 1; attempt <= retries; attempt++) {
       try {
-        const response = await fetch(`${this.config.baseURL}${endpoint}`, {
+        const response = await fetch(`${endpoint}`, {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${token}`,
@@ -139,7 +139,7 @@ export class MpesaAPI {
   }
 
   private validatePaymentRequest(request: MpesaPaymentRequest) {
-    if (!request.phoneNumber || !this.isValidPhoneNumber(request.phoneNumber)) {
+    if (!request.phoneNumber) {
       throw new Error('Invalid phone number');
     }
     if (!request.amount || request.amount <= 0) {
@@ -148,12 +148,6 @@ export class MpesaAPI {
     if (!request.accountReference) {
       throw new Error('Account reference is required');
     }
-  }
-
-  private isValidPhoneNumber(phone: string): boolean {
-    // Validate phone numbers
-    const phoneRegex = /^(?:254|\+254|0)?([17](0|1|2|4|5|6|7|8|9)[0-9]{6})$/;
-    return phoneRegex.test(phone);
   }
 
   private formatPhoneNumber(phone: string): string {
