@@ -34,7 +34,7 @@ export async function POST(request: Request) {
     if (data.Body.stkCallback.ResultCode === 0) {
       const amount = callbackData.find(item => item.Name === 'Amount');
 
-      if (!amount || !phoneNumber) {
+      if (!amount) {
         throw new Error('Missing required callback data');
       }
 
