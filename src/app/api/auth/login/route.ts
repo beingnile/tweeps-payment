@@ -21,15 +21,18 @@ export async function POST(request: Request) {
       .setExpirationTime('8h')
       .sign(SECRET_KEY);
 
-    const cookieStore = cookies();
-    await cookieStore.set('auth-token', token, {
+    const response = NextResponse.json({ success: true });
+
+    response.cookies.set('auth-token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 8 * 60 * 60 // 8 hours
+      maxAge: 8 * 60 * 60, // 8 hours
+      path: '/' // Ensure cookie is available across all routes
     });
 
-    return NextResponse.json({ success: true });
+    return response;
+
   } catch (error) {
     console.error('Login error:', error);
     return NextResponse.json(

@@ -43,7 +43,13 @@ export default function LoginPage() {
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
-          <img src="/tweeps-logo-_1_.svg" alt="Tweeps Logo" className="h-16 w-auto" />
+          <Image
+            src="/tweeps-logo-_1_.svg"
+            alt="Tweeps Logo"
+            width={64}
+            height={64}
+            className="h-16 w-auto"
+          />
         </div>
         <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
           Sign in to your account
