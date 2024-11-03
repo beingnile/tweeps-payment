@@ -49,6 +49,7 @@ export async function POST(request: Request) {
       logger.info('Payment processed successfully');
     } else {
       await TransactionsManager.addTransaction({
+        phoneNumber: phoneNumber.Value.toString(),
         amount: 0,
         status: 'Pending'
       });
