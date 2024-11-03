@@ -17,7 +17,7 @@ interface MpesaRequestPayload {
 
 export class MpesaAPI {
   private config: MpesaConfig;
-  private accessToken: string | null = null;
+  private accessToken: string = "";
   private tokenExpiry: number = 0;
   private logger: Logger;
 
