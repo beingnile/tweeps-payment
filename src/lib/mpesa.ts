@@ -69,44 +69,39 @@ export class MpesaAPI {
   }
 
   public async initiatePayment(request: MpesaPaymentRequest): Promise<MpesaResponse> {
-    try {
-      this.validatePaymentRequest(request);
-      
-      const token = await this.getAccessToken();
-      const timestamp = this.generateTimestamp();
-      const password = this.generatePassword(timestamp);
+    this.validatePaymentRequest(request);
+  
+    const token = await this.getAccessToken();
+    const timestamp = this.generateTimestamp();
+    const password = this.generatePassword(timestamp);
 
-      const payload = {
-        BusinessShortCode: this.config.shortcode,
-        Password: password,
-        Timestamp: timestamp,
-        TransactionType: 'CustomerPayBillOnline',
-        Amount: Math.round(request.amount), // Ensure whole numbers only
-        PartyA: this.formatPhoneNumber(request.phoneNumber),
-        PartyB: this.config.shortcode,
-        PhoneNumber: this.formatPhoneNumber(request.phoneNumber),
-        CallBackURL: this.config.callbackUrl,
-        AccountReference: request.accountReference,
-        TransactionDesc: request.transactionDesc,
-      };
+    const payload = {
+      BusinessShortCode: this.config.shortcode,
+      Password: password,
+      Timestamp: timestamp,
+      TransactionType: 'CustomerPayBillOnline',
+      Amount: Math.round(request.amount), // Ensure whole numbers only
+      PartyA: this.formatPhoneNumber(request.phoneNumber),
+      PartyB: this.config.shortcode,
+      PhoneNumber: this.formatPhoneNumber(request.phoneNumber),
+      CallBackURL: this.config.callbackUrl,
+      AccountReference: request.accountReference,
+      TransactionDesc: request.transactionDesc,
+    };
 
-      this.logger.info('Initiating payment:', { 
-        phoneNumber: this.maskPhoneNumber(request.phoneNumber),
-        amount: request.amount,
-        reference: request.accountReference
-      });
+    this.logger.info('Initiating payment:', { 
+      phoneNumber: this.maskPhoneNumber(request.phoneNumber),
+      amount: request.amount,
+      reference: request.accountReference
+    });
 
-      const response = await this.makeRequest(
-        `${this.config.baseURL}/mpesa/stkpush/v1/processrequest`,
-        payload,
-        token
-      );
+    const response = await this.makeRequest(
+      `${this.config.baseURL}/mpesa/stkpush/v1/processrequest`,
+      payload,
+      token
+    );
 
-      return response;
-    } catch {
-      this.logger.error('Payment initiation failed');
-      return response
-    }
+    return response;
   }
 
   private async makeRequest(
