@@ -29,7 +29,7 @@ export default function RootLayout({
               <div className="flex justify-between h-16">
                 <div className="flex">
                   <div className="flex-shrink-0 flex items-center">
-                    <img src="tweeps-logo-_1_.svg" alt="Tweeps Logo" className="h-12 w-auto" />
+                    <img src="/tweeps-logo-_1_.svg" alt="Tweeps Logo" className="h-12 w-auto" />
                   </div>
                 </div>
               </div>

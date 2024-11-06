@@ -2,13 +2,13 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { SignJWT } from 'jose';
 
-const SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET || 'your-secret-key');
+const SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET);
 
 export async function POST(request: Request) {
   try {
     const { email, password } = await request.json();
 
-    if (email !== 'tweeps-fastfood@gmail.com' || password !== 'FOOD200') {
+    if (email !== process.env.EMAIL || password !== process.env.PASSWORD) {
       return NextResponse.json(
         { error: 'Invalid credentials' },
         { status: 401 }
