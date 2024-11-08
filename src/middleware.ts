@@ -22,7 +22,7 @@ export async function middleware(request: NextRequest) {
     // Verify JWT token
     await jwtVerify(
       token.value,
-      new TextEncoder().encode(process.env.JWT_SECRET || 'your-secret-key')
+      new TextEncoder().encode(process.env.JWT_SECRET)
     );
     return NextResponse.next();
   } catch {
@@ -31,5 +31,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|favicon.ico|public).*)']
+  matcher: ['/((?!_next/static|favicon.ico|public|.*\\.svg).*)']
 };

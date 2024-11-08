@@ -70,7 +70,7 @@ export default function LoginPage() {
                   type="email"
                   autoComplete="email"
                   required
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#f2ae2a] focus:border-[#f2ae2a] sm:text-black"
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 text-black focus:outline-none focus:ring-[#f2ae2a] focus:border-[#f2ae2a] sm:text-sm"
                 />
               </div>
             </div>
@@ -86,7 +86,7 @@ export default function LoginPage() {
                   type="password"
                   autoComplete="current-password"
                   required
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#f2ae2a] focus:border-[#f2ae2a] sm:text-black"
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 text-black focus:outline-none focus:ring-[#f2ae2a] focus:border-[#f2ae2a] sm:text-sm"
                 />
               </div>
             </div>
