@@ -87,7 +87,7 @@ export default function MpesaPaymentForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
-        <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="phoneNumber" className="block text-sm font-medium text-black-700 mb-2">
           Phone Number
         </label>
         <div className="relative rounded-md shadow-sm">
@@ -112,7 +112,7 @@ export default function MpesaPaymentForm() {
       </div>
 
       <div>
-        <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="amount" className="block text-sm font-medium text-black-700 mb-2">
           Amount (KES)
         </label>
         <div className="relative rounded-md shadow-sm">
@@ -175,7 +175,7 @@ export default function MpesaPaymentForm() {
       <button
         type="submit"
         disabled={loading || !validatePhoneNumber(formData.phoneNumber) || !validateAmount(formData.amount)}
-        className={`w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-[#f2ae2a] hover:bg-[#4d200b] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#f2ae2a] transition-all duration-300 ease-in-out ${
+        className={`w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-base font-medium text-black bg-[#f2ae2a] hover:bg-[#4d200b] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#f2ae2a] transition-all duration-300 ease-in-out ${
           (loading || !validatePhoneNumber(formData.phoneNumber) || !validateAmount(formData.amount)) 
             ? 'opacity-50 cursor-not-allowed' 
             : 'hover:scale-[1.02]'
