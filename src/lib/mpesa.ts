@@ -46,9 +46,24 @@ export class MpesaAPI {
     if (this.tokenLock) {
       await this.tokenLock;
       if (this.isTokenValid()) {
+        console.info({
+          timestamp: new Date().toISOString(),
+          service: "MpesaAPI",
+          level: "info",
+          message: "Using cached access token",
+          accessToken: this.accessToken,
+          expiry: new Date(this.tokenExpiry).toISOString(),
+        });
         return this.accessToken;
       }
     }
+
+    console.info({
+      timestamp: new Date().toISOString(),
+      service: "MpesaAPI",
+      level: "info",
+      message: "Requesting new access token"
+    });
 
     let resolveLock: (() => void) | null = null;
     this.tokenLock = new Promise<void>((resolve) => {
@@ -96,7 +111,16 @@ export class MpesaAPI {
       this.accessToken = data.access_token;
       // Set token expiry (default to 50 minutes if expires_in not provided)
       this.tokenExpiry = Date.now() + ((data.expires_in || 3000) * 1000);
-      
+     
+      console.info({
+        timestamp: new Date().toISOString(),
+        service: "MpesaAPI",
+        level: "info",
+        message: "New access token obtained",
+        accessToken,
+        expiry: new Date(this.tokenExpiry).toISOString(),
+      });
+
       this.logger.info('New access token obtained');
       
       return this.accessToken;
@@ -146,10 +170,10 @@ export class MpesaAPI {
       );
     } catch (error) {
       if (error instanceof Error && error.message.includes('Invalid Access Token')) {
-        // Force token refresh and retry once
+        this.tokenExpiry = 0;
         this.logger.info('Invalid token detected, forcing refresh and retrying');
+        throw error;
       }
-      throw error;
     }
   }
 
@@ -163,10 +187,19 @@ export class MpesaAPI {
 
     for (let attempt = 1; attempt <= retries; attempt++) {
       try {
+        console.info({
+          timestamp: new Date().toISOString(),
+          service: "MpesaAPI",
+          level: "info",
+          message: "Making request to endpoint",
+          endpoint,
+          accessToken: this.token,
+        });
+
         const response = await fetch(endpoint, {
           method: 'POST',
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${this.token}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(payload),
@@ -176,6 +209,15 @@ export class MpesaAPI {
 
         if (!response.ok) {
           // Log the actual error response
+          console.error({
+            timestamp: new Date().toISOString(),
+            service: "MpesaAPI",
+            level: "error",
+            message: "Request failed",
+            status: response.status,
+            response: errorData,
+          });
+
           this.logger.error('Request failed', {
             status: response.status,
             data,
