@@ -18,6 +18,7 @@ interface MpesaRequestPayload {
 export class MpesaAPI {
   private config: MpesaConfig;
   private accessToken: string = "";
+  private tokenExpiry: number = 0;
   private logger: Logger;
 
   constructor(config: MpesaConfig) {
@@ -34,31 +35,54 @@ export class MpesaAPI {
 
   private async getAccessToken(): Promise<string> {
     try {
+      // Check if token is still valid (with 30 seconds buffer)
+      if (this.accessToken && this.tokenExpiry > Date.now() + 30000) {
+        return this.accessToken;
+      }
+
       const auth = Buffer.from(
         `${this.config.consumerKey}:${this.config.consumerSecret}`
       ).toString('base64');
 
+      this.logger.info('Requesting new access token');
+      
       const response = await fetch(
         `${this.config.baseURL}/oauth/v1/generate?grant_type=client_credentials`,
         {
+          method: 'GET',
           headers: {
             Authorization: `Basic ${auth}`,
-            'Content-Type': 'application/json'
           }
         }
       );
 
       if (!response.ok) {
-        throw new Error(`Failed to get access token: ${response.statusText}`);
+        const errorText = await response.text();
+        this.logger.error('Failed to get access token', {
+          status: response.status,
+          statusText: response.statusText,
+          error: errorText
+        });
+        throw new Error(`Failed to get access token: ${response.statusText}. ${errorText}`);
       }
 
       const data = await response.json();
-      this.accessToken = data.access_token;
+      
+      if (!data.access_token) {
+        this.logger.error('Invalid token response', { data });
+        throw new Error('Invalid token response from server');
+      }
 
+      this.accessToken = data.access_token;
+      // Set token expiry (default to 50 minutes if expires_in not provided)
+      this.tokenExpiry = Date.now() + ((data.expires_in || 3000) * 1000);
+      
+      this.logger.info('New access token obtained');
+      
       return this.accessToken;
-    } catch {
-      this.logger.error('Failed to get access token');
-      throw new Error('Authentication failed');
+    } catch (error) {
+      this.logger.error('Token request failed', { error });
+      throw new Error(`Authentication failed: ${error.message}`);
     }
   }
 
@@ -80,7 +104,7 @@ export class MpesaAPI {
       PhoneNumber: this.formatPhoneNumber(request.phoneNumber),
       CallBackURL: this.config.callbackUrl,
       AccountReference: request.accountReference,
-      TransactionDesc: request.transactionDesc,
+      TransactionDesc: request.transactionDesc || `Payment for ${request.accountReference}`,
     };
 
     this.logger.info('Initiating payment:', { 
@@ -89,13 +113,11 @@ export class MpesaAPI {
       reference: request.accountReference
     });
 
-    const response = await this.makeRequest(
+    return await this.makeRequest(
       `${this.config.baseURL}/mpesa/stkpush/v1/processrequest`,
       payload,
       token
     );
-
-    return response;
   }
 
   private async makeRequest(
@@ -103,10 +125,10 @@ export class MpesaAPI {
     payload: MpesaRequestPayload,
     token: string,
     retries = 3
-  ): Promise<any> {
+  ): Promise<MpesaResponse> {
     for (let attempt = 1; attempt <= retries; attempt++) {
       try {
-        const response = await fetch(`${endpoint}`, {
+        const response = await fetch(endpoint, {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${token}`,
@@ -118,20 +140,47 @@ export class MpesaAPI {
         const data = await response.json();
 
         if (!response.ok) {
+          // Log the actual error response
+          this.logger.error('Request failed', {
+            status: response.status,
+            data,
+            attempt
+          });
+
+          if (response.status === 401 || data?.errorCode === 'Invalid Access Token') {
+            // Force token refresh on next attempt
+            this.tokenExpiry = 0;
+            if (attempt < retries) {
+              this.logger.info('Refreshing token and retrying...');
+              token = await this.getAccessToken();
+              continue;
+            }
+          }
+          
           throw new Error(data.errorMessage || response.statusText);
         }
 
         if (data.ResponseCode !== '0') {
+          this.logger.error('Payment request failed', { 
+            responseCode: data.ResponseCode,
+            responseDescription: data.ResponseDescription 
+          });
           throw new Error(data.ResponseDescription || 'Payment request failed');
         }
 
         return data;
       } catch (error) {
-        if (attempt === retries) throw error;
+        if (attempt === retries) {
+          this.logger.error('All retry attempts failed', { error });
+          throw error;
+        }
         // Exponential backoff
-        await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
+        const backoffTime = Math.pow(2, attempt) * 1000;
+        this.logger.info(`Retrying after ${backoffTime}ms (attempt ${attempt}/${retries})`);
+        await new Promise(resolve => setTimeout(resolve, backoffTime));
       }
     }
+    throw new Error('Request failed after all retries');
   }
 
   private validatePaymentRequest(request: MpesaPaymentRequest) {
