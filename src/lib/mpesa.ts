@@ -159,6 +159,8 @@ export class MpesaAPI {
     token: string,
     retries = 3
   ): Promise<MpesaResponse> {
+    let lastError: Error | null = null;
+
     for (let attempt = 1; attempt <= retries; attempt++) {
       try {
         const response = await fetch(endpoint, {
