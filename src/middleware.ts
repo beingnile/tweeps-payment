@@ -4,7 +4,6 @@ import type { NextRequest } from 'next/server';
 
 export async function middleware(request: NextRequest) {
   const publicPaths = [
-    '/login',
     '/',
     '/api/auth/login',  // Explicitly list auth endpoints
     '/favicon.ico',
