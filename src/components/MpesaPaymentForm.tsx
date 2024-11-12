@@ -66,6 +66,7 @@ export default function MpesaPaymentForm() {
     try {
       const response = await fetch('/api/payments/initiate', {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json'
         },
