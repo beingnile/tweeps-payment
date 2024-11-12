@@ -59,7 +59,7 @@ export default function MpesaPaymentForm() {
     const paymentData: MpesaPaymentRequest = {
       phoneNumber: normalizedPhone,
       amount: Number(formData.amount),
-      accountReference: `ORDER-${Date.now()}`,
+      accountReference: `ORDER-Kapsimotwa Tickets`,
       transactionDesc: 'Payment for order'
     }
 
@@ -97,7 +97,7 @@ export default function MpesaPaymentForm() {
             id="phoneNumber"
             value={formData.phoneNumber}
             onChange={handleInputChange}
-            className="block w-full px-4 py-3 pr-10 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-base"
+            className="text-black block w-full px-4 py-3 pr-10 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-base"
             placeholder="254XXXXXXXXX or 0XXXXXXXXX"
             required
             aria-invalid={!validatePhoneNumber(formData.phoneNumber)}
@@ -117,7 +117,7 @@ export default function MpesaPaymentForm() {
         </label>
         <div className="relative rounded-md shadow-sm">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <span className="text-gray-500 sm:text-base">KES</span>
+            <span className="text-gray-500 sm:text-black">KES</span>
           </div>
           <input
             type="number"
@@ -125,7 +125,7 @@ export default function MpesaPaymentForm() {
             id="amount"
             value={formData.amount}
             onChange={handleInputChange}
-            className="block w-full pl-16 px-4 py-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-base"
+            className="block text-black w-full pl-16 px-4 py-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-black"
             min="10"
             max="150000"
             required

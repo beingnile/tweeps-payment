@@ -18,7 +18,6 @@ interface MpesaRequestPayload {
 export class MpesaAPI {
   private config: MpesaConfig;
   private accessToken: string = "";
-  private tokenExpiry: number = 0;
   private logger: Logger;
 
   constructor(config: MpesaConfig) {
@@ -35,11 +34,6 @@ export class MpesaAPI {
 
   private async getAccessToken(): Promise<string> {
     try {
-      // Check if token is still valid (with 5-minute buffer)
-      if (this.accessToken && Date.now() < this.tokenExpiry - 300000) {
-        return this.accessToken;
-      }
-
       const auth = Buffer.from(
         `${this.config.consumerKey}:${this.config.consumerSecret}`
       ).toString('base64');
@@ -49,8 +43,8 @@ export class MpesaAPI {
         {
           headers: {
             Authorization: `Basic ${auth}`,
-          },
-          cache: 'no-store',
+            'Content-Type': 'application/json'
+          }
         }
       );
 
@@ -60,7 +54,7 @@ export class MpesaAPI {
 
       const data = await response.json();
       this.accessToken = data.access_token;
-      this.tokenExpiry = Date.now() + (data.expires_in * 1000);
+
       return this.accessToken;
     } catch {
       this.logger.error('Failed to get access token');
@@ -95,10 +89,15 @@ export class MpesaAPI {
       reference: request.accountReference
     });
 
+    const headers = {
+      'Authorization': 'Bearer ' + token,
+      'Content-Type': 'application/json'
+    };
+
     const response = await this.makeRequest(
       `${this.config.baseURL}/mpesa/stkpush/v1/processrequest`,
       payload,
-      token
+      { headers }
     );
 
     return response;
