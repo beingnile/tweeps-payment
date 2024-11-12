@@ -162,19 +162,11 @@ export class MpesaAPI {
       reference: request.accountReference
     });
 
-    try {
-      return await this.makeRequest(
-        `${this.config.baseURL}/mpesa/stkpush/v1/processrequest`,
-        payload,
-        token
-      );
-    } catch (error) {
-      if (error instanceof Error && error.message.includes('Invalid Access Token')) {
-        this.tokenExpiry = 0;
-        this.logger.info('Invalid token detected, forcing refresh and retrying');
-        throw error;
-      }
-    }
+    return await this.makeRequest(
+      `${this.config.baseURL}/mpesa/stkpush/v1/processrequest`,
+      payload,
+      token
+    );
   }
 
   private async makeRequest(
