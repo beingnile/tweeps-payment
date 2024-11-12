@@ -82,7 +82,7 @@ export class MpesaAPI {
       return this.accessToken;
     } catch (error) {
       this.logger.error('Token request failed', { error });
-      throw new Error(`Authentication failed: ${error.message}`);
+      throw new Error(`Authentication failed: ${error}`);
     }
   }
 
