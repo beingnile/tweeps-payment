@@ -191,7 +191,7 @@ export class MpesaAPI {
         const response = await fetch(endpoint, {
           method: 'POST',
           headers: {
-            Authorization: `Bearer ${this.token}`,
+            Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(payload),
