@@ -149,13 +149,6 @@ export class MpesaAPI {
       if (error instanceof Error && error.message.includes('Invalid Access Token')) {
         // Force token refresh and retry once
         this.logger.info('Invalid token detected, forcing refresh and retrying');
-        this.tokenExpiry = 0;
-        token = await this.getAccessToken();
-        return await this.makeRequest(
-          `${this.config.baseURL}/mpesa/stkpush/v1/processrequest`,
-          payload,
-          token
-        );
       }
       throw error;
     }
