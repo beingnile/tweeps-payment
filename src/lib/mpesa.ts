@@ -166,7 +166,7 @@ export class MpesaAPI {
       return await this.makeRequest(
         `${this.config.baseURL}/mpesa/stkpush/v1/processrequest`,
         payload,
-        token = token
+        token
       );
     } catch (error) {
       if (error instanceof Error && error.message.includes('Invalid Access Token')) {
