@@ -23,7 +23,7 @@ export async function POST(request: Request) {
 
     const response = NextResponse.json({ success: true });
 
-    response.cookies.set('auth-token', token, {
+    response.cookies.set('internal-auth-token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',

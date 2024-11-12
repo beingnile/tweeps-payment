@@ -3,13 +3,14 @@ import { jwtVerify } from 'jose';
 import type { NextRequest } from 'next/server';
 
 export async function middleware(request: NextRequest) {
-  // Public routes that don't need authentication
   const publicPaths = [
     '/login',
     '/',
     '/api/auth/login',  // Explicitly list auth endpoints
     '/favicon.ico',
-    '/public'
+    '/public',
+    '/api/payments/callback',
+    '/api/payments/initiate'
   ];
 
   // Check if the current path is public
@@ -17,7 +18,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const token = request.cookies.get('auth-token');
+  const token = request.cookies.get('internal-auth-token');
 
   if (!token) {
     // For API routes, return JSON response
