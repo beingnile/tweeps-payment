@@ -89,15 +89,15 @@ export class MpesaAPI {
       reference: request.accountReference
     });
 
-    const headers = {
-      'Authorization': 'Bearer ' + token,
-      'Content-Type': 'application/json'
-    };
-
     const response = await this.makeRequest(
       `${this.config.baseURL}/mpesa/stkpush/v1/processrequest`,
       payload,
-      { headers }
+      {
+        headers: {
+          Authorization: `Basic ${token}`,
+          'Content-Type': 'application/json'
+        }
+      }
     );
 
     return response;
