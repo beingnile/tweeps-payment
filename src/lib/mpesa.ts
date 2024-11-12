@@ -207,7 +207,7 @@ export class MpesaAPI {
             level: "error",
             message: "Request failed",
             status: response.status,
-            response: response.data,
+            response: data,
           });
 
           this.logger.error('Request failed', {
