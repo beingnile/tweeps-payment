@@ -117,7 +117,7 @@ export class MpesaAPI {
         service: "MpesaAPI",
         level: "info",
         message: "New access token obtained",
-        accessToken,
+        this.accessToken,
         expiry: new Date(this.tokenExpiry).toISOString(),
       });
 
