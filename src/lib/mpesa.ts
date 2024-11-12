@@ -51,7 +51,7 @@ export class MpesaAPI {
     }
 
     let resolveLock: (() => void) | null = null;
-    this.tokenLock = new Promise(resolve => {
+    this.tokenLock = new Promise<void>((resolve: () => void) => {
       resolveLock = resolve;
     });
 
@@ -101,7 +101,7 @@ export class MpesaAPI {
       
       return this.accessToken;
     } finally {
-      if (resolveLock) {
+      if (resolveLock !== null) {
         resolveLock();
       }
       this.tokenLock = null;
