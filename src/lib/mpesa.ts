@@ -117,7 +117,7 @@ export class MpesaAPI {
         service: "MpesaAPI",
         level: "info",
         message: "New access token obtained",
-        this.accessToken,
+        token: this.accessToken,
         expiry: new Date(this.tokenExpiry).toISOString(),
       });
 
@@ -192,8 +192,8 @@ export class MpesaAPI {
           service: "MpesaAPI",
           level: "info",
           message: "Making request to endpoint",
-          endpoint,
-          accessToken: this.token,
+          url: endpoint,
+          accessToken: token,
         });
 
         const response = await fetch(endpoint, {
